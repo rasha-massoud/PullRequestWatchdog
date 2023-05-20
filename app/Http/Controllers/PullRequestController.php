@@ -26,6 +26,22 @@ class PullRequestController extends Controller
         $this->writePullRequestsToFile('1-old-pull-requests.txt', $pullRequests);
     }
 
+    public function getPullRequestsWithReviewRequired()
+    {
+        $client = new Client();
+
+        $response = $client->get('https://api.github.com/search/issues', [
+            'query' => [
+                'q' => 'repo:woocommerce/woocommerce is:pr is:open review:required',
+                'per_page' => 100,
+            ],
+        ]);
+
+        $pullRequests = json_decode($response->getBody(), true)['items'];
+
+        $this->writePullRequestsToFile('2-review-required-pull-requests.txt', $pullRequests);
+    }
+
     private function writePullRequestsToFile($filename, $pullRequests)
     {
         $file = fopen($filename, 'w');
