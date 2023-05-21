@@ -107,7 +107,7 @@ class PullRequestController extends Controller
 
     private function writePullRequestsToFile($filename, $pullRequests)
     {
-        $filePath = storage_path('app/' . $filename);
+        $filePath = storage_path('app/requests/' . $filename);
         $file = fopen($filePath, 'w');
 
         foreach ($pullRequests as $pullRequest) {
