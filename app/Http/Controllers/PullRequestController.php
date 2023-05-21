@@ -32,12 +32,11 @@ class PullRequestController extends Controller
             $pullRequests = json_decode($response->getBody(), true)['items'];
     
             $this->writePullRequestsToFile('1-old-pull-requests.txt', $pullRequests);
-            $this->writePullRequestsToGoogleSheet($pullRequests, 'Old Pull Requests');
+            // $this->writePullRequestsToGoogleSheet($pullRequests, 'Old Pull Requests');
 
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error has occured while getting old pull requests'.$e->getMessage()]);
         }
-       
     }
 
     public function getPullRequestsWithReviewRequired()
@@ -55,7 +54,7 @@ class PullRequestController extends Controller
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
             $this->writePullRequestsToFile('2-review-required-pull-requests.txt', $pullRequests);
-            $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with Review Required');
+            // $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with Review Required');
 
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error has occured while getting old pull requests with review required']);
@@ -77,7 +76,7 @@ class PullRequestController extends Controller
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
             $this->writePullRequestsToFile('3-review-successful-pull-requests.txt', $pullRequests);
-            $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with Successful Review');
+            // $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with Successful Review');
 
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error has occured while getting old pull requests with successful review']);
@@ -99,7 +98,7 @@ class PullRequestController extends Controller
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
             $this->writePullRequestsToFile('4-no-reviews-requested-pull-requests.txt', $pullRequests);
-            $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with No Reviews Requested');
+            // $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with No Reviews Requested');
 
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error has occured while getting old pull requests with no requested review']);
