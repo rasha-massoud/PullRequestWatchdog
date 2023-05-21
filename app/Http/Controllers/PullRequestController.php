@@ -97,7 +97,7 @@ class PullRequestController extends Controller
 
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
-            $this->writePullRequestsToFile('PullRequestsWithNoReviewsRequested.txt', $pullRequests);
+            $this->writePullRequestsToFile('NoReviewsRequestedPullRequests.txt', $pullRequests);
             // $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with No Reviews Requested');
 
         } catch (\Exception $e) {
