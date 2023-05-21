@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 use Exception;
+use Google_Client;
+use Google_Service_Sheets;
+use Google_Service_Sheets_ValueRange;
+
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 
@@ -28,9 +32,10 @@ class PullRequestController extends Controller
             $pullRequests = json_decode($response->getBody(), true)['items'];
     
             $this->writePullRequestsToFile('1-old-pull-requests.txt', $pullRequests);
-        
+            $this->writePullRequestsToGoogleSheet($pullRequests, 'Old Pull Requests');
+
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error has occured while getting old pull requests']);
+            return response()->json(['error' => 'An error has occured while getting old pull requests'.$e->getMessage()]);
         }
        
     }
@@ -50,7 +55,8 @@ class PullRequestController extends Controller
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
             $this->writePullRequestsToFile('2-review-required-pull-requests.txt', $pullRequests);
-            
+            $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with Review Required');
+
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error has occured while getting old pull requests with review required']);
         }
@@ -71,6 +77,7 @@ class PullRequestController extends Controller
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
             $this->writePullRequestsToFile('3-review-successful-pull-requests.txt', $pullRequests);
+            $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with Successful Review');
 
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error has occured while getting old pull requests with successful review']);
@@ -92,7 +99,8 @@ class PullRequestController extends Controller
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
             $this->writePullRequestsToFile('4-no-reviews-requested-pull-requests.txt', $pullRequests);
-            
+            $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with No Reviews Requested');
+
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error has occured while getting old pull requests with no requested review']);
         }
@@ -108,6 +116,36 @@ class PullRequestController extends Controller
         }
 
         fclose($file);
+    }
+
+    private function writePullRequestsToGoogleSheet($pullRequests, $sheetName)
+    {
+        $client = new Google_Client();
+        $client->setAuthConfig(env('GOOGLE_SHEETS_CLIENT_SECRET'));
+        $client->addScope(Google_Service_Sheets::SPREADSHEETS);
+
+        $service = new Google_Service_Sheets($client);
+
+        $spreadsheetId = env('GOOGLE_SHEETS_SPREADSHEET_ID');
+        $range = $sheetName . '!A1:C';
+
+        $values = [
+            ['PR#', 'PR Title', 'PR URL'],
+        ];
+
+        foreach ($pullRequests as $pullRequest) {
+            $values[] = [
+                $pullRequest['number'],
+                $pullRequest['title'],
+                $pullRequest['html_url'],
+            ];
+        }
+
+        $body = new Google_Service_Sheets_ValueRange([
+            'values' => $values
+        ]);
+
+        $service->spreadsheets_values->append($spreadsheetId, $range, $body, ['valueInputOption' => 'USER_ENTERED']);
     }
 
 }
