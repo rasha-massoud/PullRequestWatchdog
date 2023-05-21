@@ -31,7 +31,7 @@ class PullRequestController extends Controller
     
             $pullRequests = json_decode($response->getBody(), true)['items'];
     
-            $this->writePullRequestsToFile('1-old-pull-requests.txt', $pullRequests);
+            $this->writePullRequestsToFile('OldPullRequests.txt', $pullRequests);
             // $this->writePullRequestsToGoogleSheet($pullRequests, 'Old Pull Requests');
 
         } catch (\Exception $e) {
@@ -53,7 +53,7 @@ class PullRequestController extends Controller
 
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
-            $this->writePullRequestsToFile('2-review-required-pull-requests.txt', $pullRequests);
+            $this->writePullRequestsToFile('ReviewRequiredPullRequests.txt', $pullRequests);
             // $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with Review Required');
 
         } catch (\Exception $e) {
@@ -75,7 +75,7 @@ class PullRequestController extends Controller
 
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
-            $this->writePullRequestsToFile('3-review-successful-pull-requests.txt', $pullRequests);
+            $this->writePullRequestsToFile('ReviewSuccessfulPullRequests.txt', $pullRequests);
             // $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with Successful Review');
 
         } catch (\Exception $e) {
@@ -97,7 +97,7 @@ class PullRequestController extends Controller
 
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
-            $this->writePullRequestsToFile('4-no-reviews-requested-pull-requests.txt', $pullRequests);
+            $this->writePullRequestsToFile('PullRequestsWithNoReviewsRequested.txt', $pullRequests);
             // $this->writePullRequestsToGoogleSheet($pullRequests, 'Pull Requests with No Reviews Requested');
 
         } catch (\Exception $e) {
