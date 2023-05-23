@@ -15,7 +15,7 @@
 
         'service'          => [
             'enable' => env('GOOGLE_SERVICE_ENABLED', true),
-            'file'   => env('GOOGLE_SERVICE_ACCOUNT_JSON_LOCATION', storage_path('app/githubpullrequest-f00e90674ef4.json')),
+            'file'   => env('GOOGLE_SERVICE_ACCOUNT_JSON_LOCATION', storage_path('app') . '/' . env('GOOGLE_SERVICE_ACCOUNT_JSON_LOCATION')),
         ],
         'config'           => [],
         'post_spreadsheet_id' => env('POST_SPREADSHEET_ID'),
