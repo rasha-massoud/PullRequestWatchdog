@@ -32,7 +32,7 @@ class PullRequestController extends Controller
             $pullRequests = json_decode($response->getBody(), true)['items'];
     
             $this->writePullRequestsToFile('OldPullRequests.txt', $pullRequests);
-            $this->writePullRequestsToGoogleSheet($pullRequests, 'github-pull-request-sheet');
+            $this->writePullRequestsToGoogleSheet($pullRequests);
 
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error has occured while getting old pull requests'.$e->getMessage()]);
@@ -54,7 +54,7 @@ class PullRequestController extends Controller
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
             $this->writePullRequestsToFile('ReviewRequiredPullRequests.txt', $pullRequests);
-            $this->writePullRequestsToGoogleSheet($pullRequests, 'github-pull-request-sheet');
+            $this->writePullRequestsToGoogleSheet($pullRequests);
 
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error has occured while getting old pull requests with review required']);
@@ -76,7 +76,7 @@ class PullRequestController extends Controller
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
             $this->writePullRequestsToFile('ReviewSuccessfulPullRequests.txt', $pullRequests);
-            $this->writePullRequestsToGoogleSheet($pullRequests, 'github-pull-request-sheet');
+            $this->writePullRequestsToGoogleSheet($pullRequests);
 
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error has occured while getting old pull requests with successful review']);
@@ -98,7 +98,7 @@ class PullRequestController extends Controller
             $pullRequests = json_decode($response->getBody(), true)['items'];
 
             $this->writePullRequestsToFile('NoReviewsRequestedPullRequests.txt', $pullRequests);
-            $this->writePullRequestsToGoogleSheet($pullRequests, 'github-pull-request-sheet');
+            $this->writePullRequestsToGoogleSheet($pullRequests);
 
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error has occured while getting old pull requests with no requested review']);
@@ -118,7 +118,7 @@ class PullRequestController extends Controller
         fclose($file);
     }
 
-    private function writePullRequestsToGoogleSheet($pullRequests, $sheetName)
+    private function writePullRequestsToGoogleSheet($pullRequests)
     {
         $client = new Google_Client();
         $client->setAuthConfig(storage_path('/app' . env('GOOGLE_SERVICE_ACCOUNT_JSON_LOCATION')));
